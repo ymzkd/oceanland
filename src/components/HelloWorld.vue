@@ -1,58 +1,108 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+    <v-row class="text-center">
+      <v-col class="mb-4">
+        <h1 class="display-2 font-weight-bold mb-3">
+          海率計算
+        </h1>
+
+        <p class="subheading font-weight-regular">
+          積雪荷重計算のための任意地点から任意半径内の円の面積に対する海の面積の比率(海率)を計算する。
+        </p>
+      </v-col>
+
+      <v-col cols="12">
+        <v-img
+          :src="plot_src"
+          class="my-3"
+          contain
+        />
+          <!-- height="200" -->
+      </v-col>
+    </v-row>
+
+    <v-form>
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="6"
+            md="3"
+          >
+            <v-text-field
+              label="Longitude"
+              placeholder="Longitude"
+              v-model="longitude"
+            ></v-text-field>
+          </v-col>
+          <p>経度</p>
+          <v-col
+            cols="12"
+            sm="6"
+            md="3"
+          >
+              <!-- label="Latitude" -->
+            <v-text-field
+              placeholder="Latitude"
+              v-model="latitude"
+            ></v-text-field>
+          </v-col>
+          <p>半径</p>
+          <v-col
+            cols="12"
+            sm="6"
+            md="3"
+          >
+              <!-- label="Latitude" -->
+            <v-text-field
+              placeholder="Radious"
+              v-model="radious"
+            ></v-text-field>
+          </v-col>
+          <v-btn
+            elevation="2"
+            @click="calculate"
+          > calculate </v-btn>
+        </v-row>
+      </v-container>
+    </v-form>
+    <p> 海抜: {{height}} m, 海率: {{rate.toFixed(5)}} </p>
+  </v-container>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
+  import axios from 'axios'
+  export default {
+    name: 'HelloWorld',
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+    data: () => ({
+      longitude: 139.7454329,
+      latitude: 35.6585805,
+      radious: 40,
+      height: 0,
+      rate: 0,
+      plot_src: '',
+      apiurl: 'https://fast-brushlands-96070.herokuapp.com/',
+      // apiurl: 'http://127.0.0.1:5000/',
+    }),
+    mounted: function(){
+      this.calculate()
+    },
+    methods: {
+      calculate(){
+        axios
+        .post(this.apiurl + 'pos', {
+          lon: String(this.longitude),
+          lat: String(this.latitude),
+          rad: String(this.radious)
+        })
+        .then((res) => {
+          this.height = res.data.elevation
+          this.rate = res.data.sea_ratio
+          this.plot_src = "data:image/png;base64," + res.data.image_src;
+          console.log(res.data)
+        })
+      }
+    }
+  }
+</script>
