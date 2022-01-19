@@ -27,9 +27,6 @@
         <v-btn block @click="copyText">
             Copy Text
         </v-btn>
-      <!-- <textarea class="textzone" cols="80" rows="10" v-model="str"/> -->
-      <!-- <div>変換済み</div> -->
-      <!-- <textarea class="textzone" cols="80" rows="10" v-model="fixed" readonly/> -->
     </div>
   </v-container>
 </template>

@@ -15,7 +15,7 @@ npm run serve
 npm run build
 ```
 
-### Build and Deploy
+### Build and Deploy to Firebase
 ```
 npm run build
 npm run deploy
