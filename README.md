@@ -18,7 +18,7 @@ npm run build
 ### Build and Deploy to Firebase
 ```
 npm run build
-npm run deploy
+firebase deploy
 ```
 
 ### Lints and fixes files
