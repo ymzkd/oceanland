@@ -30,6 +30,16 @@
             <v-list-item-title>Text Transform</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item link to="/sound">
+          <v-list-item-icon>
+            <v-icon>mdi-text-box-check-outline</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Sound Analysis</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
